@@ -48,11 +48,15 @@ app.post("/add-pincode", (req, res) => {
 // runs every 10 minutes
 cron.schedule(process.env.CRON_CONFIG, async () => {
   console.log('CRON EXECUTED');
-  availablePincodes.forEach(pincode => {
-    selectedAgeGroup.forEach(async (minAge) => {
-      await helper.checkAvailability(pincode, minAge);
-    })
-  });
+  try {
+    availablePincodes.forEach(pincode => {
+      selectedAgeGroup.forEach(async (minAge) => {
+        await helper.checkAvailability(pincode, minAge);
+      })
+    });
+  } catch(err) {
+    console.log('Error in Scheduler', err);
+  }
 });
 
 httpServer.listen(process.env.PORT || 8080, () => {
