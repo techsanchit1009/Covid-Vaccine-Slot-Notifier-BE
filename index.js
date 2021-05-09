@@ -55,6 +55,6 @@ cron.schedule(process.env.CRON_CONFIG, async () => {
   });
 });
 
-httpServer.listen(process.env.PORT, () => {
-  console.log("Server running at", process.env.PORT);
+httpServer.listen(process.env.PORT || 8080, () => {
+  console.log("Server running at", process.env.PORT || 8080);
 });
