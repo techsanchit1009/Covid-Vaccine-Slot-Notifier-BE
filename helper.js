@@ -26,6 +26,7 @@ const checkAvailability = async (pincode, minAge) => {
             (session) =>
               session.available_capacity > 0 && session.min_age_limit === minAge
           ),
+          vaccine: center.sessions.length && center.sessions[0].vaccine, 
         };
       });
       const availableCenters = [];
@@ -37,7 +38,7 @@ const checkAvailability = async (pincode, minAge) => {
       if (availableCenters.length > 0) {
         let smsString = '';
         availableCenters.forEach((center, i) => {
-          smsString = smsString.concat(`<b>${center.name}</b> -- (<b>${minAge}+</b>) -- ${center.fee_type} \n`);
+          smsString = smsString.concat(`• <b>${center.name}</b> -- (<b>${minAge}+</b>) -- ${center.fee_type} (${center.vaccine}) \n\n`);
         });
         // await client.messages.create({
         //   body: '\nAvailable centers -- \n'.concat(smsString),
