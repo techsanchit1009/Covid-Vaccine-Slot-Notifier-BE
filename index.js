@@ -34,7 +34,7 @@ app.get("/", async (req, res) => {
     });
     res.send({data: 'Messages sent'});
   } catch (err) {
-    console.log('err');
+    console.log(err);
   }
 });
 
