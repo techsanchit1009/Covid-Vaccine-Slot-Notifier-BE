@@ -36,9 +36,9 @@ const checkAvailability = async (pincode, minAge) => {
         }
       });
       if (availableCenters.length > 0) {
-        let smsString = '';
+        let messageString = '';
         availableCenters.forEach((center, i) => {
-          smsString = smsString.concat(`• <b>${center.name}</b> -- (<b>${minAge}+</b>) -- ${center.fee_type} (${center.vaccine}) \n\n`);
+          messageString = messageString.concat(`• <b>${center.name}</b> -- (<b>${minAge}+</b>) -- ${center.fee_type} (${center.vaccine}) \n\n`);
         });
         // await client.messages.create({
         //   body: '\nAvailable centers -- \n'.concat(smsString),
@@ -52,7 +52,7 @@ const checkAvailability = async (pincode, minAge) => {
         // });
         tgApi.sendMessage({
           chat_id: '@cowinnotifier',
-          text: `<u><b>${moment().format('Do MMM YYYY')}</b> - Available centers for <b>${pincode}</b> \n\n</u>`.concat(smsString),
+          text: `<u><b>${moment().format('Do MMM YYYY')}</b> - Available centers for <b>${pincode}</b> \n\n</u>`.concat(messageString),
           parse_mode: 'html'
         }).then(resp => {
           console.log('Message was sent')
