@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json())
 
-app.get("/", async (req, res) => {
+app.get("/api", async (req, res) => {
   try {
     availablePincodes.forEach(pincode => {
       selectedAgeGroup.forEach(async (minAge) => {
@@ -38,7 +38,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/add-pincode", (req, res) => {
+app.post("/api/add-pincode", (req, res) => {
   if (!availablePincodes.includes(req.body.pincode)) {
     availablePincodes.push(req.body.pincode);
   }
