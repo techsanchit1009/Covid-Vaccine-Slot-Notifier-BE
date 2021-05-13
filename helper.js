@@ -9,7 +9,7 @@ const tgApi = new telegramBot({
 
 const checkAvailability = async (pincode, minAge) => {
   try {
-    const date = moment().format('DD-MM-YYYY');
+    const date = moment().utc().add(5, 'h').add(30, 'm').format('DD-MM-YYYY');
     const response = await axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pincode}&date=${date}`, {
       headers: {
         Accept: '*/*',
@@ -52,7 +52,7 @@ const checkAvailability = async (pincode, minAge) => {
         // });
         tgApi.sendMessage({
           chat_id: '@cowinnotifier',
-          text: `<u><b>${moment().format('Do MMM YYYY')}</b> - Available centers for <b>${pincode}</b> \n\n</u>`.concat(messageString),
+          text: `<u><b>${moment().utc().add(5, 'h').add(30, 'm').format('Do MMM YYYY')}</b> - Available centers for <b>${pincode}</b> \n\n</u>`.concat(messageString),
           parse_mode: 'html'
         }).then(resp => {
           console.log('Message was sent')
