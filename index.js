@@ -45,10 +45,16 @@ app.post("/api/add-pincode", (req, res) => {
   res.send({message: "Details added!", available_pincodes: storedPincodes});
 });
 
+app.get("/api/pincodes", middleware.verifyAdmin, (req, res) => {
+  const availablePincodes = store.getPincodes();
+  res.send({total: availablePincodes.length, available_pincodes: availablePincodes});
+});
+
 // runs every 5 minutes
 cron.schedule(process.env.CRON_CONFIG, async () => {
   console.log('CRON EXECUTED');
   try {
+    const availablePincodes = store.getPincodes();
     availablePincodes.forEach(pincode => {
       selectedAgeGroup.forEach(async (minAge) => {
         await helper.checkAvailability(pincode, minAge);

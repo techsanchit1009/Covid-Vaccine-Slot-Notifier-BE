@@ -24,7 +24,7 @@ const checkAvailability = async (pincode, minAge) => {
           ...center,
           sessions: center.sessions.filter(
             (session) =>
-              session.available_capacity > 0 && session.min_age_limit === minAge
+              session.available_capacity_dose1 > 0 && session.min_age_limit === minAge
           ),
           vaccine: center.sessions.length && center.sessions[0].vaccine, 
         };
@@ -37,10 +37,16 @@ const checkAvailability = async (pincode, minAge) => {
       });
       if (availableCenters.length > 0) {
         let messageString = '';
-        availableCenters.forEach((center, i) => {
-          messageString = messageString.concat(`• <b>${center.name}</b> -- (<b>${minAge}+</b>) -- ${center.fee_type} (${center.vaccine}) \n\n`);
+        availableCenters.forEach(center => {
+          messageString = messageString.concat(`<b>Center : </b>${center.name} \n<b>Age Group : </b>${minAge}+ \n<b>Availability : </b>\n`);
+          center.sessions.forEach((session) => {
+            messageString = messageString.concat(`• ${moment(session.date, 'DD-MM-YYYY').format('Do MMM')} \t <b>${session.available_capacity_dose1} slots</b>\n`);
+          });
+          messageString = messageString.concat(`<b>Vaccine : </b>${center.vaccine} -- ${center.fee_type} \n\n`);
         });
-        // await client.messages.create({
+
+        // For Twilio
+        // client.messages.create({
         //   body: '\nAvailable centers -- \n'.concat(smsString),
         //   from: '+17727948273',
         //   to: '+919899855244',
@@ -50,9 +56,11 @@ const checkAvailability = async (pincode, minAge) => {
         //   to: 'whatsapp:+919899855244',
         //   body: '\nAvailable centers -- \n'.concat(smsString),
         // });
+
+        // For Telegram
         tgApi.sendMessage({
           chat_id: '@cowinnotifier',
-          text: `<u><b>${moment().utc().add(5, 'h').add(30, 'm').format('Do MMM YYYY')}</b> - Available centers for <b>${pincode}</b> \n\n</u>`.concat(messageString),
+          text: `<u><b>${pincode}</b> \n\n</u>`.concat(messageString),
           parse_mode: 'html'
         }).then(resp => {
           console.log('Message was sent')
